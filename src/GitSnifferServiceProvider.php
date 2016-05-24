@@ -3,7 +3,6 @@
 namespace Avirdz\LaravelGitSniffer;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Filesystem\Filesystem;
 
 class GitSnifferServiceProvider extends ServiceProvider
 {
@@ -15,6 +14,22 @@ class GitSnifferServiceProvider extends ServiceProvider
      */
     protected $defer = true;
 
+    /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $configPath = __DIR__ . '/../config/git-sniffer.php';
+        if (function_exists('config_path')) {
+            $publishPath = config_path('git-sniffer.php');
+        } else {
+            $publishPath = base_path('config/git-sniffer.php');
+        }
+
+        $this->publishes([$configPath => $publishPath], 'config');
+    }
 
     /**
      * Register the service provider.
@@ -28,7 +43,7 @@ class GitSnifferServiceProvider extends ServiceProvider
 
         $this->app['command.git-sniffer.copy'] = $this->app->share(
             function ($app) {
-                return new CopyHookCommand($app['config']);
+                return new CopyHookCommand($app['config'], $app['files']);
             }
         );
 
