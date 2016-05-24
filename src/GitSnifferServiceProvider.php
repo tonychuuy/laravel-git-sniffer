@@ -3,6 +3,7 @@
 namespace Avirdz\LaravelGitSniffer;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Filesystem\Filesystem;
 
 class GitSnifferServiceProvider extends ServiceProvider
 {
@@ -31,7 +32,13 @@ class GitSnifferServiceProvider extends ServiceProvider
             }
         );
 
-        $this->commands('command.git-sniffer.copy');
+        $this->app['command.git-sniffer.phpcs'] = $this->app->share(
+            function ($app) {
+                return new CodeSnifferCommand($app['config'], $app['files']);
+            }
+        );
+
+        $this->commands('command.git-sniffer.copy', 'command.git-sniffer.phpcs');
     }
 
     /**
@@ -41,6 +48,6 @@ class GitSnifferServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array('command.git-sniffer.copy');
+        return array('command.git-sniffer.copy', 'command.git-sniffer.phpcs');
     }
 }

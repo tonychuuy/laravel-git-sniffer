@@ -20,15 +20,24 @@ class CopyHookCommand extends Command
      * @var string
      */
     protected $description = 'Copy the git hooks scripts to hooks directory';
+    protected $config;
 
-
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
+    public function __construct($config)
     {
-        $this->info('running ' . __FILE__);
+        parent::__construct();
+        $this->config = $config;
+    }
+
+
+    public function fire()
+    {
+        $environment = $this->config->get('app.env');
+        $gitSnifferEnv = $this->config->get('git-sniffer.env');
+
+        if ($environment !== $gitSnifferEnv) {
+            return;
+        }
+
+
     }
 }
