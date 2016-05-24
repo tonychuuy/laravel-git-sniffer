@@ -17,5 +17,15 @@
         "psr-4": {
             "Avirdz\\LaravelGitSniffer\\": "src"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php -r \"@mkdir('.git/hooks')\"",
+            "php -r \"copy('vendor/avirdz/laravel-git-sniffer/resources/pre-commit', '.git/hooks/pre-commit')\""
+        ],
+        "post-update-cmd": [
+            "php -r \"@mkdir('.git/hooks')\"",
+            "php -r \"copy('vendor/avirdz/laravel-git-sniffer/resources/pre-commit', '.git/hooks/pre-commit')\""
+        ]
     }
 }
