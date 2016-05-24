@@ -1,0 +1,21 @@
+{
+    "name": "avirdz/laravel-git-sniffer",
+    "description": "An artisan command to check your code standards via pre-commit git hook.",
+    "keywords": ["laravel", "codesniffer", "phpcs", "git", "pre-commit", "hook"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jesus Aviles",
+            "email": "avirdz@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.9.0",
+        "laravel/laravel": "5.2.x"
+    },
+    "autoload": {
+        "psr-4": {
+            "Avirdz\\LaravelGitSniffer\\": "src"
+        }
+    }
+}
