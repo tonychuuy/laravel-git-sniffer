@@ -23,7 +23,4 @@ return array(
 
     // temp dir to staged files
     'temp' => '.tmp_staging',
-
-    // copy also the post-checkout hook
-    'post-checkout' => false,
 );
