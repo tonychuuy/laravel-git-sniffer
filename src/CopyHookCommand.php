@@ -38,7 +38,6 @@ class CopyHookCommand extends Command
     {
         $environment = $this->config->get('app.env');
         $gitSnifferEnv = $this->config->get('git-sniffer.env');
-        $copyPostCheckout = $this->config->get('git-sniffer.post-checkout');
 
         if ($environment !== $gitSnifferEnv) {
             return;
@@ -50,19 +49,10 @@ class CopyHookCommand extends Command
         }
 
         $preCommitHook = $hooksDir . '/pre-commit';
-        $postCheckoutHook = $hooksDir . '/post-checkout';
-
         $preCommitResource = $this->files->dirname(__DIR__) . '/resources/pre-commit';
-        $postCheckoutResource = $this->files->dirname(__DIR__) . '/resources/post-checkout';
 
         if ($this->files->exists($preCommitResource)) {
             $this->files->copy($preCommitResource, $preCommitHook);
-        }
-
-        if($copyPostCheckout) {
-            if ($this->files->exists($postCheckoutResource)) {
-                $this->files->copy($postCheckoutResource, $postCheckoutHook);
-            }
         }
     }
 }
