@@ -13,8 +13,8 @@ return array(
     // file encoding
     'encoding' => 'utf-8',
 
-    // valid file extensions to verify
-    'extensions' => [
+    // valid file extensions to verify on phpcs
+    'phpcs_extensions' => [
         'php'
     ],
 
@@ -23,4 +23,17 @@ return array(
 
     // temp dir to staged files
     'temp' => '.tmp_staging',
+
+    // Eslint specific config
+
+    // full path for eslint bin
+    'eslint_bin' => '',
+
+    // eslint config file
+    'eslint_config' => '',
+
+    // valid file extensions to verify on eslint
+    'eslint_extensions' => [
+        'js'
+    ],
 );
