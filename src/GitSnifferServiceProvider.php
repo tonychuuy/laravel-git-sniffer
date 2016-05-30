@@ -47,13 +47,13 @@ class GitSnifferServiceProvider extends ServiceProvider
             }
         );
 
-        $this->app['command.git-sniffer.phpcs'] = $this->app->share(
+        $this->app['command.git-sniffer.check'] = $this->app->share(
             function ($app) {
                 return new CodeSnifferCommand($app['config'], $app['files']);
             }
         );
 
-        $this->commands('command.git-sniffer.copy', 'command.git-sniffer.phpcs');
+        $this->commands('command.git-sniffer.copy', 'command.git-sniffer.check');
     }
 
     /**
@@ -63,6 +63,6 @@ class GitSnifferServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array('command.git-sniffer.copy', 'command.git-sniffer.phpcs');
+        return array('command.git-sniffer.copy', 'command.git-sniffer.check');
     }
 }
