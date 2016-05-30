@@ -40,9 +40,14 @@ env      | (string) default: local | The environment where the commands will be 
 phpcs_bin    | (string) default: ./vendor/bin/phpcs | bin for Php_CodeSniffer, installed as a dependency.
 standard | (string) default: PSR2  | Code standard
 encoding | (string) default: utf-8 | The encoding of your source files
-extensions | (array) default: php | Valid file extensions to check
+extensions | (array) default: php | Valid php file extensions to check
 ignore | (array)  | Not implemented 
 temp | (string) default: .tmp_staging| A temp directory where staged files will be copied
+eslint_bin | (string) | bin for ESLint
+eslint_config | (string) | Path to the eslintrc config file
+eslint_extensions | (array) default: js | Valid js file extensions to check
+
+If you leave eslint_bin config empty it will be ignored, the same for phpcs_bin, but you need to configure at least one of them.
 
 ### Resources
 I'ts the same script just translated to php to work with laravel command. 
