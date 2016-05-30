@@ -59,7 +59,7 @@ class CodeSnifferCommand extends Command
             if (!$this->files->exists($eslintBin)) {
                 $this->error('ESLint bin not found');
                 exit(1);
-            } else if (!$this->files->exists($eslintConfig)) {
+            } elseif (!$this->files->exists($eslintConfig)) {
                 $this->error('ESLint config file not found');
                 exit(1);
             }
@@ -143,7 +143,7 @@ class CodeSnifferCommand extends Command
         $eslintOutput = null;
         $phpcsOutput = null;
 
-        if(!empty($phpcsBin) && !empty($phpStaged)) {
+        if (!empty($phpcsBin) && !empty($phpStaged)) {
             $standard = $this->config->get('git-sniffer.standard');
             $encoding = $this->config->get('git-sniffer.encoding');
             $phpcsExtensions = implode(',', $validPhpExtensions);
@@ -151,9 +151,9 @@ class CodeSnifferCommand extends Command
             $phpcsOutput = shell_exec("\"{$phpcsBin}\" -s --standard={$standard} --encoding={$encoding} --extensions={$phpcsExtensions} {$sniffFiles}");
         }
 
-        if(!empty($eslintBin) && !empty($eslintStaged)) {
+        if (!empty($eslintBin) && !empty($eslintStaged)) {
             $eslintFiles = implode(' ', $eslintStaged);
-            $eslintOutput = shell_exec("\"{$eslintBin}\" -c \"{$eslintConfig}\" {$eslintFiles}");
+            $eslintOutput = shell_exec("\"{$eslintBin}\" -c \"{$eslintConfig}\" --no-ignore {$eslintFiles}");
         }
 
         $this->files->deleteDirectory($tempStaging);
