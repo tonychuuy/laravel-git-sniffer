@@ -41,11 +41,20 @@ phpcs_bin    | (string) default: ./vendor/bin/phpcs | bin for Php_CodeSniffer, i
 standard | (string) default: PSR2  | Code standard
 encoding | (string) default: utf-8 | The encoding of your source files
 extensions | (array) default: php | Valid php file extensions to check
-ignore | (array)  | Not implemented 
+phpcs_ignore | (array) default: ./resources/views/*  | Blade templates are ignored by default
 temp | (string) default: .tmp_staging| A temp directory where staged files will be copied
 eslint_bin | (string) | bin for ESLint
 eslint_config | (string) | Path to the eslintrc config file
 eslint_extensions | (array) default: js | Valid js file extensions to check
+eslint_ignore_path | (string) | Path to the .eslintignore file.
+
+Note: Eslint ignores all hidden files and directories by default, since there is a temp staging folder and by default is hidden, you need
+to add it to the eslintignore files at the first line.
+
+```sh
+!.tmp_staging
+otherfile.js
+```
 
 If you leave eslint_bin config empty it will be ignored, the same for phpcs_bin, but you need to configure at least one of them.
 
