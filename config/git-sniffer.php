@@ -18,8 +18,11 @@ return array(
         'php'
     ],
 
-    // ignore list
-    'ignore' => [],
+    // phpcs ignore list
+    'phpcs_ignore' => [
+        //laravel view blade templates
+        './resources/views/*'
+    ],
 
     // temp dir to staged files
     'temp' => '.tmp_staging',
@@ -36,4 +39,9 @@ return array(
     'eslint_extensions' => [
         'js'
     ],
+
+    // eslint ignore list
+    // add the value of your temp folder to properly ignore files
+    // ex: !.tmp_staging (on the first line of you ignore file)
+    'eslint_ignore_path' => '',
 );

@@ -5,6 +5,10 @@ namespace Avirdz\LaravelGitSniffer;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
+/**
+ * Class CodeSnifferCommand
+ * @package Avirdz\LaravelGitSniffer
+ */
 class CodeSnifferCommand extends Command
 {
 
@@ -27,6 +31,11 @@ class CodeSnifferCommand extends Command
     /** @var Filesystem */
     protected $files;
 
+    /**
+     * CodeSnifferCommand constructor.
+     * @param $config
+     * @param Filesystem $files
+     */
     public function __construct($config, Filesystem $files)
     {
         parent::__construct();
@@ -34,7 +43,9 @@ class CodeSnifferCommand extends Command
         $this->files = $files;
     }
 
-
+    /**
+     * Handle the command
+     */
     public function fire()
     {
         $environment = $this->config->get('app.env');
@@ -47,6 +58,7 @@ class CodeSnifferCommand extends Command
         $phpcsBin = $this->config->get('git-sniffer.phpcs_bin');
         $eslintBin = $this->config->get('git-sniffer.eslint_bin');
         $eslintConfig = $this->config->get('git-sniffer.eslint_config');
+        $eslintIgnorePath = $this->config->get('git-sniffer.eslint_ignore_path');
 
         if (!empty($phpcsBin)) {
             if (!$this->files->exists($phpcsBin)) {
@@ -62,6 +74,13 @@ class CodeSnifferCommand extends Command
             } elseif (!$this->files->exists($eslintConfig)) {
                 $this->error('ESLint config file not found');
                 exit(1);
+            }
+
+            if (!empty($eslintIgnorePath)) {
+                if (!$this->files->exists($eslintIgnorePath)) {
+                    $this->error('ESLint ignore file not found');
+                    exit(1);
+                }
             }
         }
 
@@ -146,14 +165,26 @@ class CodeSnifferCommand extends Command
         if (!empty($phpcsBin) && !empty($phpStaged)) {
             $standard = $this->config->get('git-sniffer.standard');
             $encoding = $this->config->get('git-sniffer.encoding');
+            $ignoreFiles = $this->config->get('git-sniffer.phpcs_ignore');
             $phpcsExtensions = implode(',', $validPhpExtensions);
             $sniffFiles = implode(' ', $phpStaged);
-            $phpcsOutput = shell_exec("\"{$phpcsBin}\" -s --standard={$standard} --encoding={$encoding} --extensions={$phpcsExtensions} {$sniffFiles}");
+
+            $phpcsIgnore = null;
+            if (!empty($ignoreFiles)) {
+                $phpcsIgnore = ' --ignore=' . implode(',', $ignoreFiles);
+            }
+            $phpcsOutput = shell_exec("\"{$phpcsBin}\" -s --standard={$standard} --encoding={$encoding} --extensions={$phpcsExtensions}{$phpcsIgnore} {$sniffFiles}");
         }
 
         if (!empty($eslintBin) && !empty($eslintStaged)) {
             $eslintFiles = implode(' ', $eslintStaged);
-            $eslintOutput = shell_exec("\"{$eslintBin}\" -c \"{$eslintConfig}\" --no-ignore {$eslintFiles}");
+            $eslintIgnore = ' --no-ignore';
+
+            if (!empty($eslintIgnorePath)) {
+                $eslintIgnore = ' --ignore-path "' . $eslintIgnorePath . '"';
+            }
+
+            $eslintOutput = shell_exec("\"{$eslintBin}\" -c \"{$eslintConfig}\"{$eslintIgnore} --quiet  {$eslintFiles}");
         }
 
         $this->files->deleteDirectory($tempStaging);
