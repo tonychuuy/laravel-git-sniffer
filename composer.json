@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "illuminate/console": "5.0.x|5.1.x|5.2.x",
+        "illuminate/console": "5.*",
         "squizlabs/php_codesniffer": "^2.6"
     },
     "autoload": {
