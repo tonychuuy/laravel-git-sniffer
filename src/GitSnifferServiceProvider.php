@@ -41,17 +41,13 @@ class GitSnifferServiceProvider extends ServiceProvider
         $configPath = __DIR__ . '/../config/git-sniffer.php';
         $this->mergeConfigFrom($configPath, 'git-sniffer');
 
-        $this->app['command.git-sniffer.copy'] = $this->app->share(
-            function ($app) {
-                return new CopyHookCommand($app['config'], $app['files']);
-            }
-        );
+        $this->app->singleton('command.git-sniffer.copy', function ($app) {
+            return new CopyHookCommand($app['config'], $app['files']);
+        });
 
-        $this->app['command.git-sniffer.check'] = $this->app->share(
-            function ($app) {
-                return new CodeSnifferCommand($app['config'], $app['files']);
-            }
-        );
+        $this->app->singleton('command.git-sniffer.check', function ($app) {
+            return new CodeSnifferCommand($app['config'], $app['files']);
+        });
 
         $this->commands('command.git-sniffer.copy', 'command.git-sniffer.check');
     }
