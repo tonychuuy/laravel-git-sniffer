@@ -49,10 +49,9 @@ class CopyHookCommand extends Command
         }
 
         $preCommitHook = $hooksDir . '/pre-commit';
-        $preCommitResource = $this->files->dirname(__DIR__) . '/resources/pre-commit';
+        $preCommitContents = '#!/bin/bash'
+            . PHP_EOL . $this->config->get('git-sniffer.precommit_command', 'php artisan git-sniffer:check');
 
-        if ($this->files->exists($preCommitResource)) {
-            $this->files->copy($preCommitResource, $preCommitHook);
-        }
+        $this->files->put($preCommitHook, $preCommitContents);
     }
 }

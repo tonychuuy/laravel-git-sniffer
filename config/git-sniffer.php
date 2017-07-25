@@ -4,6 +4,9 @@ return array(
     // run the commands only in this environment
     'env' => 'local',
 
+    // pre-commit command
+    'precommit_command' => 'php artisan git-sniffer:check',
+
     // full path for phpcs bin
     'phpcs_bin' => './vendor/bin/phpcs',
 
