@@ -34,7 +34,7 @@ class CopyHookCommand extends Command
     }
 
 
-    public function fire()
+    public function handle()
     {
         $environment = $this->config->get('app.env');
         $gitSnifferEnv = $this->config->get('git-sniffer.env');
