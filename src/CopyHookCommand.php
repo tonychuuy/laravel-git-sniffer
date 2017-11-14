@@ -40,7 +40,7 @@ class CopyHookCommand extends Command
         $gitSnifferEnv = $this->config->get('git-sniffer.env');
 
         if ($environment !== $gitSnifferEnv) {
-            return;
+            exit(0);
         }
 
         $hooksDir = base_path('.git/hooks');
