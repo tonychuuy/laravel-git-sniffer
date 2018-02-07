@@ -43,15 +43,16 @@ class CopyHookCommand extends Command
             exit(0);
         }
 
-        $hooksDir = base_path('.git/hooks');
-        if (!$this->files->isDirectory($hooksDir)) {
-            $this->files->makeDirectory($hooksDir, 0755);
-        }
+        $this->files->makeDirectory(base_path('.git/hooks'), 0755, true);
 
-        $preCommitHook = $hooksDir . '/pre-commit';
-        $preCommitContents = '#!/bin/bash'
-            . PHP_EOL . $this->config->get('git-sniffer.precommit_command', 'php artisan git-sniffer:check');
+        $stub = $this->files->get(__DIR__ . '/..resources/pre-commit');
 
-        $this->files->put($preCommitHook, $preCommitContents);
+        $preCommitContents = str_replace(
+            '%COMMAND%',
+            $this->config->get('git-sniffer.precommit_command', 'php artisan git-sniffer:check'),
+            $stub
+        );
+
+        $this->files->put(base_path('.git/hooks/pre-commit'), $preCommitContents);
     }
 }

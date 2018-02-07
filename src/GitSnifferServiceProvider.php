@@ -6,7 +6,6 @@ use Illuminate\Support\ServiceProvider;
 
 class GitSnifferServiceProvider extends ServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -21,14 +20,16 @@ class GitSnifferServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $configPath = __DIR__ . '/../config/git-sniffer.php';
-        if (function_exists('config_path')) {
-            $publishPath = config_path('git-sniffer.php');
-        } else {
-            $publishPath = base_path('config/git-sniffer.php');
-        }
+        $this->publishes([
+            __DIR__ . '/../config/git-sniffer.php' => config_path('git-sniffer.php')
+        ], 'config');
 
-        $this->publishes([$configPath => $publishPath], 'config');
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                CopyHookCommand::class,
+                CodeSnifferCommand::class,
+            ]);
+        }
     }
 
     /**
@@ -38,18 +39,20 @@ class GitSnifferServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $configPath = __DIR__ . '/../config/git-sniffer.php';
-        $this->mergeConfigFrom($configPath, 'git-sniffer');
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/git-sniffer.php',
+            'git-sniffer'
+        );
 
-        $this->app->singleton('command.git-sniffer.copy', function ($app) {
-            return new CopyHookCommand($app['config'], $app['files']);
-        });
-
-        $this->app->singleton('command.git-sniffer.check', function ($app) {
-            return new CodeSnifferCommand($app['config'], $app['files']);
-        });
-
-        $this->commands('command.git-sniffer.copy', 'command.git-sniffer.check');
+//        $this->app->singleton('command.git-sniffer.copy', function ($app) {
+//            return new CopyHookCommand($app['config'], $app['files']);
+//        });
+//
+//        $this->app->singleton('command.git-sniffer.check', function ($app) {
+//            return new CodeSnifferCommand($app['config'], $app['files']);
+//        });
+//
+//        $this->commands('command.git-sniffer.copy', 'command.git-sniffer.check');
     }
 
     /**
@@ -57,8 +60,8 @@ class GitSnifferServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    public function provides()
-    {
-        return array('command.git-sniffer.copy', 'command.git-sniffer.check');
-    }
+//    public function provides()
+//    {
+//        return array('command.git-sniffer.copy', 'command.git-sniffer.check');
+//    }
 }

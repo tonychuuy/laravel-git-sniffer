@@ -48,6 +48,7 @@ class CodeSnifferCommand extends Command
      */
     public function handle()
     {
+        $config = $this->config->get('git-sniffer');
         $environment = $this->config->get('app.env');
         $gitSnifferEnv = $this->config->get('git-sniffer.env');
 
