@@ -7,7 +7,7 @@ An artisan command to check your code standards via pre-commit git hook
 composer require avirdz/laravel-git-sniffer
 ```
 
-#### Add the provider to app config
+#### Add the provider to app config (You don't need to do this if using Laravel >= 5.5)
 ```sh
 Avirdz\LaravelGitSniffer\GitSnifferServiceProvider
 ```

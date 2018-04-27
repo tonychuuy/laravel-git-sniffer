@@ -18,5 +18,12 @@
         "psr-4": {
             "Avirdz\\LaravelGitSniffer\\": "src"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Avirdz\\LaravelGitSniffer\\GitSnifferServiceProvider"
+            ]
+        }
     }
 }
