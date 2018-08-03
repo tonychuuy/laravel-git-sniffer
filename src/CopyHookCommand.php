@@ -53,5 +53,13 @@ class CopyHookCommand extends Command
             . PHP_EOL . $this->config->get('git-sniffer.precommit_command', 'php artisan git-sniffer:check');
 
         $this->files->put($preCommitHook, $preCommitContents);
+
+        // Get a short string of the OS (WIN, LIN, DAR)
+        $os = strtoupper(substr(php_uname('s'), 0, 3));
+
+        if ($os != 'WIN') {
+            // If we're running unix-like OS, set executable bit for pre-hook
+            $this->files->chmod($preCommitHook, fileperms($preCommitHook) | 0111);
+        }
     }
 }
