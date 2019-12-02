@@ -24,6 +24,17 @@ class GitSnifferServiceProvider extends ServiceProvider
         'command.git-sniffer.check' => CodeSnifferCommand::class
     ];
 
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->publishConfiguration();
+
+        $this->registerCommands();
+    }
 
     /**
      * Configure config path.
@@ -38,18 +49,6 @@ class GitSnifferServiceProvider extends ServiceProvider
         }
         $this->mergeConfigFrom($configPath, 'git-sniffer');
         $this->publishes([$configPath => $publishPath], 'config');
-    }
-
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->publishConfiguration();
-
-        $this->registerCommands();
     }
 
     /**
