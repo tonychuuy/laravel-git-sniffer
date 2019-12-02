@@ -50,8 +50,6 @@ class GitSnifferServiceProvider extends ServiceProvider
         $this->publishConfiguration();
 
         $this->registerCommands();
-
-        $this->commands('command.git-sniffer.copy', 'command.git-sniffer.check');
     }
 
     /**
