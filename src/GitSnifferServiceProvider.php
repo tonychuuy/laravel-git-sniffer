@@ -15,21 +15,14 @@ class GitSnifferServiceProvider extends ServiceProvider
     protected $defer = true;
 
     /**
-     * Bootstrap the application events.
+     * Console commands to be instantiated.
      *
-     * @return void
+     * @var array
      */
-    public function boot()
-    {
-        $configPath = __DIR__ . '/../config/git-sniffer.php';
-        if (function_exists('config_path')) {
-            $publishPath = config_path('git-sniffer.php');
-        } else {
-            $publishPath = base_path('config/git-sniffer.php');
-        }
-
-        $this->publishes([$configPath => $publishPath], 'config');
-    }
+    protected $commandList = [
+        'command.git-sniffer.copy' => CopyHookCommand::class,
+        'command.git-sniffer.check' => CodeSnifferCommand::class
+    ];
 
     /**
      * Register the service provider.
@@ -38,27 +31,47 @@ class GitSnifferServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $configPath = __DIR__ . '/../config/git-sniffer.php';
-        $this->mergeConfigFrom($configPath, 'git-sniffer');
+        $this->publishConfiguration();
 
-        $this->app->singleton('command.git-sniffer.copy', function ($app) {
-            return new CopyHookCommand($app['config'], $app['files']);
-        });
-
-        $this->app->singleton('command.git-sniffer.check', function ($app) {
-            return new CodeSnifferCommand($app['config'], $app['files']);
-        });
-
-        $this->commands('command.git-sniffer.copy', 'command.git-sniffer.check');
+        $this->registerCommands();
     }
 
     /**
-     * Get the services provided by the provider.
-     *
-     * @return array
+     * Configure config path.
      */
-    public function provides()
+    protected function publishConfiguration()
     {
-        return array('command.git-sniffer.copy', 'command.git-sniffer.check');
+        $configPath = __DIR__ . '/../config/git-sniffer.php';
+        if (function_exists('config_path')) {
+            $publishPath = config_path('git-sniffer.php');
+        } else {
+            $publishPath = base_path('config/git-sniffer.php');
+        }
+        $this->mergeConfigFrom($configPath, 'git-sniffer');
+        $this->publishes([$configPath => $publishPath], 'config');
+    }
+
+    /**
+     * Register command.
+     *
+     * @param $name
+     * @param $commandClass string
+     */
+    protected function registerCommand($name, $commandClass)
+    {
+        $this->app->singleton($name, function ($app) use ($commandClass) {
+            return new $commandClass($app['config'], $app['files']);
+        });
+        $this->commands($name);
+    }
+
+    /**
+     * Register Artisan commands.
+     */
+    protected function registerCommands()
+    {
+        collect($this->commandList)->each(function ($commandClass, $key) {
+            $this->registerCommand($key, $commandClass);
+        });
     }
 }
