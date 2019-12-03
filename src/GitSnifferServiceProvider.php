@@ -74,4 +74,14 @@ class GitSnifferServiceProvider extends ServiceProvider
             $this->registerCommand($key, $commandClass);
         });
     }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return array('command.git-sniffer.copy', 'command.git-sniffer.check');
+    }
 }
