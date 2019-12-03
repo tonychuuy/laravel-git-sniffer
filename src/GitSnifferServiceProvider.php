@@ -24,16 +24,9 @@ class GitSnifferServiceProvider extends ServiceProvider
         'command.git-sniffer.check' => CodeSnifferCommand::class
     ];
 
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
+    public function boot()
     {
         $this->publishConfiguration();
-
-        $this->registerCommands();
     }
 
     /**
@@ -41,14 +34,43 @@ class GitSnifferServiceProvider extends ServiceProvider
      */
     protected function publishConfiguration()
     {
-        $configPath = __DIR__ . '/../config/git-sniffer.php';
-        if (function_exists('config_path')) {
-            $publishPath = config_path('git-sniffer.php');
-        } else {
-            $publishPath = base_path('config/git-sniffer.php');
-        }
-        $this->mergeConfigFrom($configPath, 'git-sniffer');
-        $this->publishes([$configPath => $publishPath], 'config');
+        $this->mergeConfigFrom($this->getConfigFileStub(), 'git-sniffer');
+
+        $this->publishes([$this->getConfigFileStub() => $this->getConfigFile()], 'config');
+    }
+
+    /**
+     * Get the config file path.
+     *
+     * @return string
+     */
+    protected function getConfigFile()
+    {
+        $publishPath = function_exists('config_path')
+            ? config_path('git-sniffer.php')
+            : base_path('config/git-sniffer.php');
+
+        return $publishPath;
+    }
+
+    /**
+     * Get the original config file.
+     *
+     * @return string
+     */
+    protected function getConfigFileStub()
+    {
+        return  __DIR__ . '/../config/git-sniffer.php';
+    }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->registerCommands();
     }
 
     /**
