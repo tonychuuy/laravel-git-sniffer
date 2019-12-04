@@ -12,7 +12,7 @@ composer require avirdz/laravel-git-sniffer
 Avirdz\LaravelGitSniffer\GitSnifferServiceProvider
 ```
 
-#### To work with Lumen add the provider to app config found in Bootstrap directory.
+#### To Lumen Add the provider to app config to bootstrap/app.php.:
 ```sh
 $app->register(Avirdz\LaravelGitSniffer\GitSnifferServiceProvider::class);
 ```
