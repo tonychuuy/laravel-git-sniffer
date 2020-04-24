@@ -60,7 +60,7 @@ class GitSnifferServiceProvider extends ServiceProvider
      */
     protected function getConfigFileStub()
     {
-        return  __DIR__ . '/../config/git-sniffer.php';
+        return  $this->getConfigFile()
     }
 
     /**
