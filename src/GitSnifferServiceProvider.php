@@ -60,7 +60,7 @@ class GitSnifferServiceProvider extends ServiceProvider
      */
     protected function getConfigFileStub()
     {
-        return  $this->getConfigFile()
+        return  $this->getConfigFile();
     }
 
     /**
